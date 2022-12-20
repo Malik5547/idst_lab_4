@@ -9,11 +9,10 @@
 #!./.venv/bin/python
 
 import discord  # base discord module
-import code  # code.interact
 import os  # environment variables
 import inspect  # call stack inspection
 import random  # dumb random number generator
-import asyncio
+import argparse
 
 from discord.ext import commands  # Bot class and utils
 
@@ -172,11 +171,19 @@ async def roll_error(ctx, error):
 ################################################################################
 
 if __name__ == '__main__':
-    # check that token exists in environment
-    if 'BOT_TOKEN' not in os.environ:
-        log_msg('save your token in the BOT_TOKEN env variable!', 'error')
-        exit(-1)
 
-    # launch bot (blocking operation)
-    bot.run(os.environ['BOT_TOKEN'])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--token", help="input bot token")
+    args = parser.parse_args()
+
+    if args.token:
+        bot.run(args.token)
+    else:
+        # check that token exists in environment
+        if 'BOT_TOKEN' not in os.environ:
+            log_msg('save your token in the BOT_TOKEN env variable!', 'error')
+            exit(-1)
+
+        # launch bot (blocking operation)
+        bot.run(os.environ['BOT_TOKEN'])
 
